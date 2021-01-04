@@ -21,7 +21,7 @@ export const getUserString = ({ identifier = '', user }) => {
 
 const computeHashForUserData = (...args) => md5(getUserString(...args));
 
-export const hasUserKeys = user =>
+export const hasUserKeys = (user) =>
   ALLOWED_LIST_OF_SET_USER_ATTRIBUTES.reduce(
     (acc, key) => acc || !!user[key],
     false
@@ -107,7 +107,7 @@ const runSDK = ({ baseUrl, websiteToken }) => {
         IFrameHelper.events.toggleBubble();
       }
 
-      Cookies.remove('cw_conversation');
+      Cookies.remove(`cw_conversation-${window.$chatwoot.websiteToken}`);
       Cookies.remove(getUserCookieName());
 
       const iframe = IFrameHelper.getAppFrame();
@@ -115,6 +115,9 @@ const runSDK = ({ baseUrl, websiteToken }) => {
         baseUrl: window.$chatwoot.baseUrl,
         websiteToken: window.$chatwoot.websiteToken,
       });
+    },
+    remove() {
+      IFrameHelper.removeFrame();
     },
   };
 

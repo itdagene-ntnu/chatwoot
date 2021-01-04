@@ -24,7 +24,7 @@ export const IFrameHelper = {
   },
   createFrame: ({ baseUrl, websiteToken }) => {
     const iframe = document.createElement('iframe');
-    const cwCookie = Cookies.get('cw_conversation');
+    const cwCookie = Cookies.get(`cw_conversation-${websiteToken}`);
     let widgetUrl = IFrameHelper.getUrl({ baseUrl, websiteToken });
     if (cwCookie) {
       widgetUrl = `${widgetUrl}&cw_conversation=${cwCookie}`;
@@ -46,6 +46,11 @@ export const IFrameHelper = {
     IFrameHelper.initWindowSizeListener();
     IFrameHelper.preventDefaultScroll();
   },
+  removeFrame: () => {
+    const frame = IFrameHelper.getAppFrame();
+    body.removeChild(widgetHolder);
+    frame.remove();
+  },
   getAppFrame: () => document.getElementById('chatwoot_live_chat_widget'),
   sendMessage: (key, value) => {
     const element = IFrameHelper.getAppFrame();
@@ -60,7 +65,7 @@ export const IFrameHelper = {
     };
   },
   initPostMessageCommunication: () => {
-    window.onmessage = e => {
+    window.onmessage = (e) => {
       if (
         typeof e.data !== 'string' ||
         e.data.indexOf('chatwoot-widget:') !== 0
@@ -77,7 +82,7 @@ export const IFrameHelper = {
     wootOn(window, 'resize', () => IFrameHelper.toggleCloseButton());
   },
   preventDefaultScroll: () => {
-    widgetHolder.addEventListener('wheel', event => {
+    widgetHolder.addEventListener('wheel', (event) => {
       const deltaY = event.deltaY;
       const contentHeight = widgetHolder.scrollHeight;
       const visibleHeight = widgetHolder.offsetHeight;
@@ -92,11 +97,15 @@ export const IFrameHelper = {
     });
   },
   events: {
-    loaded: message => {
-      Cookies.set('cw_conversation', message.config.authToken, {
-        expires: 365,
-        sameSite: 'Lax',
-      });
+    loaded: (message) => {
+      Cookies.set(
+        `cw_conversation-${window.$chatwoot.websiteToken}`,
+        message.config.authToken,
+        {
+          expires: 365,
+          sameSite: 'Lax',
+        }
+      );
       window.$chatwoot.hasLoaded = true;
       IFrameHelper.sendMessage('config-set', {
         locale: window.$chatwoot.locale,
@@ -127,7 +136,7 @@ export const IFrameHelper = {
       onBubbleClick();
     },
 
-    onBubbleToggle: isOpen => {
+    onBubbleToggle: (isOpen) => {
       if (!isOpen) {
         IFrameHelper.events.resetUnreadMode();
       } else {
@@ -135,7 +144,7 @@ export const IFrameHelper = {
       }
     },
 
-    setUnreadMode: message => {
+    setUnreadMode: (message) => {
       const { unreadMessageCount } = message;
       const { isOpen } = window.$chatwoot;
       const toggleValue = true;
@@ -158,7 +167,7 @@ export const IFrameHelper = {
       removeClass(holderEl, 'has-unread-view');
     },
   },
-  pushEvent: eventName => {
+  pushEvent: (eventName) => {
     IFrameHelper.sendMessage('push-event', { eventName });
   },
   onLoad: ({ widgetColor }) => {
