@@ -45,6 +45,13 @@ const runSDK = ({ baseUrl, websiteToken }) => {
       IFrameHelper.events.toggleBubble();
     },
 
+    hide() {
+      IFrameHelper.hideMessageBubble();
+    },
+    show() {
+      IFrameHelper.showMessageBubble();
+    },
+
     setUser(identifier, user) {
       if (typeof identifier !== 'string' && typeof identifier !== 'number') {
         throw new Error('Identifier should be a string or a number');

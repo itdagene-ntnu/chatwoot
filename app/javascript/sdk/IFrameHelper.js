@@ -51,6 +51,12 @@ export const IFrameHelper = {
     body.removeChild(widgetHolder);
     frame.remove();
   },
+  hideMessageBubble: () => {
+    addClass(bubbleHolder, 'woot--hide');
+  },
+  showMessageBubble: () => {
+    removeClass(bubbleHolder, 'woot--hide');
+  },
   getAppFrame: () => document.getElementById('chatwoot_live_chat_widget'),
   sendMessage: (key, value) => {
     const element = IFrameHelper.getAppFrame();
