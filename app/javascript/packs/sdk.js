@@ -123,6 +123,16 @@ const runSDK = ({ baseUrl, websiteToken }) => {
         websiteToken: window.$chatwoot.websiteToken,
       });
     },
+    reload() {
+      if (window.$chatwoot.isOpen) {
+        IFrameHelper.events.toggleBubble();
+      }
+      const iframe = IFrameHelper.getAppFrame();
+      iframe.src = IFrameHelper.getUrl({
+        baseUrl: window.$chatwoot.baseUrl,
+        websiteToken: window.$chatwoot.websiteToken,
+      });
+    },
     remove() {
       IFrameHelper.removeFrame();
     },
