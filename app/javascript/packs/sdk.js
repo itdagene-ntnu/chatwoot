@@ -32,6 +32,7 @@ const runSDK = ({ baseUrl, websiteToken }) => {
   window.$chatwoot = {
     baseUrl,
     hasLoaded: false,
+    isInitialized: true,
     hideMessageBubble: chatwootSettings.hideMessageBubble || false,
     isOpen: false,
     position: chatwootSettings.position === 'left' ? 'left' : 'right',
