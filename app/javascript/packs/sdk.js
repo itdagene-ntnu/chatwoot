@@ -129,10 +129,16 @@ const runSDK = ({ baseUrl, websiteToken }) => {
         IFrameHelper.events.toggleBubble();
       }
       const iframe = IFrameHelper.getAppFrame();
-      iframe.src = IFrameHelper.getUrl({
+      let widgetUrl = IFrameHelper.getUrl({
         baseUrl: window.$chatwoot.baseUrl,
         websiteToken: window.$chatwoot.websiteToken,
       });
+      const cwCookie = Cookies.get(`cw_conversation-${websiteToken}`);
+
+      if (cwCookie) {
+        widgetUrl = `${widgetUrl}&cw_conversation=${cwCookie}`;
+      }
+      iframe.src = widgetUrl;
     },
     remove() {
       IFrameHelper.removeFrame();
