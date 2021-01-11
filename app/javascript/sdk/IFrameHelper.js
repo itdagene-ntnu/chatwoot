@@ -112,16 +112,18 @@ export const IFrameHelper = {
           sameSite: 'Lax',
         }
       );
-      window.$chatwoot.hasLoaded = true;
       IFrameHelper.sendMessage('config-set', {
         locale: window.$chatwoot.locale,
         position: window.$chatwoot.position,
         hideMessageBubble: window.$chatwoot.hideMessageBubble,
         showPopoutButton: window.$chatwoot.showPopoutButton,
       });
-      IFrameHelper.onLoad({
-        widgetColor: message.config.channelConfig.widgetColor,
-      });
+      if (!window.$chatwoot.hasLoaded) {
+        IFrameHelper.onLoad({
+          widgetColor: message.config.channelConfig.widgetColor,
+        });
+      }
+      window.$chatwoot.hasLoaded = true;
       IFrameHelper.setCurrentUrl();
       IFrameHelper.toggleCloseButton();
 
