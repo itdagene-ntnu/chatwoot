@@ -133,7 +133,7 @@ const runSDK = ({ baseUrl, websiteToken }) => {
         baseUrl: window.$chatwoot.baseUrl,
         websiteToken: window.$chatwoot.websiteToken,
       });
-      const cwCookie = Cookies.get(`cw_conversation-${websiteToken}`);
+      const cwCookie = Cookies.get(`cw_conversation-${window.$chatwoot.websiteToken}`);
 
       if (cwCookie) {
         widgetUrl = `${widgetUrl}&cw_conversation=${cwCookie}`;
